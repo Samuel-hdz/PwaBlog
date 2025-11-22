@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+@custom-variant dark (&:where(.dark, .dark *));
+@plugin 'tailwind-scrollbar';
+
+#root{
+    background: #000;
+}
+
+.post-content p{
+    margin-bottom: 1.5rem;
+}
+
+.post-content h1{
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1rem 0;
+}
+
+.post-content h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1rem 0;
+}
+
+.post-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1rem 0;
+}
+
+.post-content a{
+    color: rgb(73, 149, 199);
+}
+
+.post-content a:hover {
+    text-decoration: underline;
+}

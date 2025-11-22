@@ -1,0 +1,128 @@
+import { Button, Spinner } from "flowbite-react"
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import CallToAction from "../components/CallToAction"
+import CommentSection from "../components/CommentSection"
+import PostCard from "../components/PostCard"
+import { useSelector } from 'react-redux';
+
+export default function PostPage() {
+    const { postSlug } = useParams()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
+    const [post, setPost] = useState(null)
+    const [recentPosts, setRecentPosts] = useState([])
+    const { currentUser } = useSelector((state) => state.user);
+
+    
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                setLoading(true)
+                const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
+                const data = await res.json()
+                if(!res.ok){
+                    setError(true)
+                    setLoading(false)
+                    return;
+                }
+                if(res.ok){
+                    setPost(data.posts[0])
+                    setLoading(false)
+                    setError(false)
+                }
+            } catch (error) {
+                setError(true)
+                setLoading(false)
+            }
+        };
+        fetchPost()
+    }, [postSlug])
+
+    useEffect(() => {
+        const fetchRecentPosts = async () => {
+            try {
+                setLoading(true)
+                const res = await fetch(`/api/post/getposts?limit=3`);
+                const data = await res.json()
+                if(res.ok){
+                    setLoading(false)
+                    setRecentPosts(data.posts)
+                }
+                console.log("aas",data)
+            } catch (error) {
+                setError(true)
+                setLoading(false)
+                console.log(error.message)
+            }
+        }
+        fetchRecentPosts()
+    
+    }, [post])
+
+    if(loading) return(
+        <div className="flex justify-center items-center min-h-screen">
+            <Spinner />
+        </div>
+    )
+
+return (
+  <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
+    <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
+      {post && post.title}
+    </h1>
+
+    <Link to={`/search?category=${post && post.category}`} className="self-center mt-5">
+      <Button color="gray" pill size="xs">
+        {post && post.category}
+      </Button>
+    </Link>
+
+    <img
+      src={post && post.image}
+      alt={post && post.title}
+      className="mt-10 p-3 max-h-[600px] w-full object-cover"
+    />
+
+    <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-sm">
+      <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
+      <span>{post && (post.content.length / 1000).toFixed(0)} mins read</span>
+    </div>
+
+    {post?.isExclusive && (!currentUser || !currentUser.isSubscribed) ? (
+      <div className="p-5 bg-yellow-100 border border-yellow-400 rounded-md text-center text-yellow-800 max-w-2xl mx-auto mt-10">
+        <h2 className="text-xl font-semibold mb-2">🔒 Contenido exclusivo</h2>
+        <p>Este artículo es exclusivo para suscriptores.</p>
+        <Link
+          to="/suscribete"
+          className="mt-4 inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Suscríbete para acceder
+        </Link>
+      </div>
+    ) : (
+      <div
+        className="p-3 max-w-2xl mx-auto w-full break-words post-content select-none text-justify"
+        dangerouslySetInnerHTML={{ __html: post && post.content }}
+      />
+    )}
+
+    {/* Mostrar CallToAction y Comentarios solo si no es exclusivo o si está suscrito */}
+    {(!post?.isExclusive || (currentUser && currentUser.isSubscribed)) && (
+      <>
+        {post && <CommentSection postId={post._id} />}
+      </>
+    )}
+
+    {/* Artículos recientes */}
+    <div className="flex flex-col justify-center items-center mb-5">
+      <h1 className="text-xl mt-5">Artículos recientes</h1>
+      <div className="flex flex-wrap gap-5 mt-5 justify-center">
+        {recentPosts &&
+          recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
+      </div>
+    </div>
+  </main>
+)
+
+}

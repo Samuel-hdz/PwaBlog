@@ -1,0 +1,72 @@
+.tiptap {
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    color: #000;
+    min-height: 50vh;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    &:focus {
+        outline: 2px solid blue;
+    }
+
+    pre {
+        background: #f2f2f2;
+        color: black;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    ul,
+    li {
+        margin-left: 20px;
+    }
+
+    img {
+        max-width: 50%;
+        border-radius: 5px;
+    }
+}
+
+.tiptap a {
+    color: #0e8eff;
+    text-decoration: underline;
+}
+
+.tiptap ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+}
+
+.tiptap ol {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
+}
+
+.tiptap li {
+    margin-bottom: 0.25rem; }
+
+.tiptap h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.tiptap h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+}
+
+.tiptap h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
