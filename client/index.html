@@ -1,12 +1,162 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Preconnect a dominios externos para reducir latencia -->
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
+
+  <!-- PWA meta tags -->
+  <meta name="description" content="Plataforma de divulgación de contenido cultural e histórico" />
+  <meta name="theme-color" content="#1f2937" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192x192.png" />
+
+  <!-- Preload critical resources -->
+  <link rel="modulepreload" href="/src/main.jsx" />
+
+  <title>Historika - Blog Cultural e Histórico</title>
+
+  <!-- Estilos inline críticos para el App Shell skeleton -->
+  <style>
+    /* Critical CSS - App Shell Skeleton */
+    #app-shell-skeleton {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #app-shell-skeleton.hide-skeleton {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #app-shell-skeleton.hidden {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #app-shell-skeleton {
+        background-color: #1f2937;
+      }
+    }
+
+    /* Spinner de carga optimizado */
+    .skeleton-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #e5e7eb;
+      border-top: 5px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      will-change: transform;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .skeleton-spinner {
+        border-color: #374151;
+        border-top-color: #3b82f6;
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .skeleton-text {
+      margin-top: 1rem;
+      color: #6b7280;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .skeleton-text {
+        color: #9ca3af;
+      }
+    }
+
+    /* Prevenir layout shift con altura mínima en root */
+    #root {
+      min-height: 100vh;
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- App Shell HTML estático que se muestra instantáneamente -->
+  <div id="app-shell-skeleton">
+    <div style="text-align: center;">
+      <div class="skeleton-spinner"></div>
+      <div class="skeleton-text">Cargando contenido cultural...</div>
+    </div>
+  </div>
+
+  <!-- Contenedor de React -->
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Script optimizado para ocultar skeleton cuando React carga -->
+  <script>
+    (function () {
+      const skeleton = document.getElementById('app-shell-skeleton');
+      const root = document.getElementById('root');
+
+      // Función para ocultar el skeleton
+      function hideSkeleton() {
+        if (skeleton) {
+          skeleton.classList.add('hide-skeleton');
+          setTimeout(() => {
+            skeleton.classList.add('hidden');
+          }, 300);
+        }
+      }
+
+      // Observar cuando React monta contenido en root
+      const observer = new MutationObserver((mutations) => {
+        if (root && root.children.length > 0) {
+          setTimeout(hideSkeleton, 100);
+          observer.disconnect();
+        }
+      });
+
+      // Iniciar observación
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          observer.observe(root, { childList: true, subtree: true });
+        });
+      } else {
+        observer.observe(root, { childList: true, subtree: true });
+      }
+
+      // Fallback timeout
+      setTimeout(() => {
+        if (!skeleton.classList.contains('hide-skeleton')) {
+          hideSkeleton();
+        }
+      }, 3000);
+    })();
+  </script>
+</body>
+
 </html>
