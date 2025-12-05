@@ -1,0 +1,61 @@
+{
+  "name": "Blog Cultural e Histórico",
+  "short_name": "Blog Cultural",
+  "description": "Plataforma de divulgación de contenido cultural e histórico",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f2937",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-72x72.webp",
+      "sizes": "72x72",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-96x96.webp",
+      "sizes": "96x96",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-128x128.webp",
+      "sizes": "128x128",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-144x144.webp",
+      "sizes": "144x144",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-152x152.webp",
+      "sizes": "152x152",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192x192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384x384.webp",
+      "sizes": "384x384",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "lifestyle", "news"]
+}
